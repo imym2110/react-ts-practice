@@ -15,7 +15,7 @@ const TicketSlice = createSlice({
       );
       if (ticketToUpdate) {
         ticketToUpdate.status =
-          ticketToUpdate.status === "Open" ? "Closed" : "Open";
+          ticketToUpdate.status === "Open" ? "Closed" : "Closed";
       }
     },
   },

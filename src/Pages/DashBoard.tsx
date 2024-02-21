@@ -150,7 +150,7 @@ const DashBoard: React.FC = () => {
               setOpen(false);
             }}
             handleCloseButtonClick={(row: Ticket) => {
-              const status = row.status === "Open" ? "closed" : row.status;
+              const status = row.status === "Open" ? "closed" : "Closed";
               setOpen(false);
               dispatch(changeStatus(row));
               console.log("TicketData", row);
