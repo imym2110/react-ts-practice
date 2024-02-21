@@ -1,5 +1,9 @@
 import ReactDOM from "react-dom/client";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  Navigate,
+  RouterProvider,
+} from "react-router-dom";
 import LoginPage from "./Pages/LoginPage";
 import DashBoard from "./Pages/DashBoard";
 import { store } from "./Store/index";
@@ -10,7 +14,7 @@ import ProtectedRoute from "./utils/ProtectedRoute";
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: "/login",
     element: <LoginPage />,
   },
   {
@@ -24,6 +28,10 @@ const router = createBrowserRouter([
   {
     path: "/ticket/:id",
     element: <TicketDetail />,
+  },
+  {
+    path: "*",
+    element: <Navigate to="/login" />,
   },
 ]);
 

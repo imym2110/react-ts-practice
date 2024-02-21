@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../Store";
 import { Box, Button, Typography } from "@mui/material";
 import { DataGrid, GridColDef, GridRowId } from "@mui/x-data-grid";
@@ -7,9 +7,11 @@ import { Ticket } from "../jsonData/ticketData";
 import { useNavigate } from "react-router-dom";
 import { TaskAlt } from "@mui/icons-material";
 import DialogBox from "../Components/DialogBox";
-import CurrentUserDetail from "../Components/CurrentUserDetail";
+import Logout from "../Components/Logout";
+import { changeStatus } from "../Store/Slices/ticketSlice";
 
 const DashBoard: React.FC = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [rowParams, setRowParams] = useState<Ticket>({
     ticket_id: "",
@@ -21,11 +23,9 @@ const DashBoard: React.FC = () => {
     description: "",
     location: "Vadodara",
   });
-  const ticketSelector = useSelector((state: RootState) => state.ticketReducer);
+  const rows = useSelector((state: RootState) => state.ticketReducer);
   const selector = useSelector((state: RootState) => state.userReducer);
   const userData = selector.currentUser;
-
-  const rows = ticketSelector.map((item) => item);
 
   // For No ticket logged
   // const rows: Array<Ticket> = [];
@@ -107,13 +107,13 @@ const DashBoard: React.FC = () => {
 
   const filteredColumns = filterColumns(columns, isAdmin);
   const numColumns = filteredColumns.length;
-  const boxWidth = `${numColumns * 130}px`;
+  const boxWidth = { xs: `${numColumns * 80}px`, sm: `${numColumns * 130}px` };
 
   const getRowId = (row: Ticket): GridRowId => row.ticket_id;
 
   return (
     <>
-      <CurrentUserDetail />
+      <Logout />
       {rows.length === 0 ? (
         <Box sx={{ textAlign: "center", marginTop: 2 }}>
           <Typography variant="h1">No tickets Logged</Typography>
@@ -152,6 +152,7 @@ const DashBoard: React.FC = () => {
             handleCloseButtonClick={(row: Ticket) => {
               const status = row.status === "Open" ? "closed" : row.status;
               setOpen(false);
+              dispatch(changeStatus(row));
               console.log("TicketData", row);
               console.log("Status:", status);
             }}
