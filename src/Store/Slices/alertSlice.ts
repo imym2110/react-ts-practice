@@ -20,12 +20,12 @@ const AlertSlice = createSlice({
   name: "login",
   initialState,
   reducers: {
-    setAlert(state, action: PayloadAction<AlertObject>) {
+    setAlert(state: AlertState, action: PayloadAction<AlertObject>) {
       state.content = action.payload.content;
       state.alertStatus = true;
       state.severity = action.payload.severity;
     },
-    removeAlert(state) {
+    removeAlert(state: AlertState) {
       state.content = "";
       state.alertStatus = false;
     },

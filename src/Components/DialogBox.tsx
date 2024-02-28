@@ -1,9 +1,9 @@
 import React from "react";
 import { Button, Dialog, DialogActions, DialogTitle } from "@mui/material";
-import { Ticket } from "../jsonData/ticketData";
+import { Ticket } from "../Model/ticket";
 
 interface DialogBoxProps {
-  open: boolean;
+  open: any;
   handleCloseDialog: () => void;
   handleCloseButtonClick: (rowParams: Ticket) => void;
   rowParams: Ticket;

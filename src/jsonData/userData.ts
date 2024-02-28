@@ -1,13 +1,4 @@
-// Define a type for a user
-type User = {
-  user_id: number;
-  username: string;
-  email: string;
-  password: string;
-  role: "user" | "admin";
-  location: "Vadodara" | "Udaipur" | "Mumbai" | "Bangalore";
-};
-
+import { User } from "../Model/user";
 // User data
 const userData: User[] = [
   {

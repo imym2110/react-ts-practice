@@ -3,7 +3,6 @@ import { RootState } from "../Store";
 import styled from "@emotion/styled";
 import { Alert } from "@mui/material";
 import { useEffect } from "react";
-import { UseDispatch } from "react-redux";
 import { removeAlert } from "../Store/Slices/alertSlice";
 
 const AlertWrapper = styled(Alert)({
@@ -16,7 +15,6 @@ const AlertWrapper = styled(Alert)({
 
 const AlertMessage = () => {
   const dispatch = useDispatch();
-  // console.log("alert");
   const alert = useSelector((state: RootState) => state.alertReducer);
 
   useEffect(() => {
@@ -30,9 +28,7 @@ const AlertMessage = () => {
     <>
       {alert.alertStatus ? (
         <AlertWrapper severity="error">{alert.content}</AlertWrapper>
-      ) : (
-        ""
-      )}
+      ) : null}
     </>
   );
 };

@@ -1,40 +1,38 @@
-import React, { useState } from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../Store";
 import { Box, Button, Typography } from "@mui/material";
 import { DataGrid, GridColDef, GridRowId } from "@mui/x-data-grid";
-import { Ticket } from "../jsonData/ticketData";
 import { useNavigate } from "react-router-dom";
 import { TaskAlt } from "@mui/icons-material";
 import DialogBox from "../Components/DialogBox";
 import Logout from "../Components/Logout";
-import { changeStatus } from "../Store/Slices/ticketSlice";
+import {
+  changeStatus,
+  selectCellValue,
+  toggleModel,
+} from "../Store/Slices/ticketSlice";
+import { Ticket } from "../Model/ticket";
 
 const DashBoard: React.FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [rowParams, setRowParams] = useState<Ticket>({
-    ticket_id: "",
-    username: "",
-    severity: "Low",
-    start_date: "",
-    end_date: "",
-    status: "Closed",
-    description: "",
-    location: "Vadodara",
-  });
+
   const rows = useSelector((state: RootState) => state.ticketReducer);
-  const selector = useSelector((state: RootState) => state.userReducer);
-  const userData = selector.currentUser;
+  const userSelector = useSelector((state: RootState) => state.userReducer);
+  const userData = userSelector.currentUser;
+
+  enum role {
+    admin = "admin",
+    user = "user",
+  }
 
   // For No ticket logged
   // const rows: Array<Ticket> = [];
 
-  const [open, setOpen] = useState(false);
-
   const handleOpenDialog = (row: Ticket) => {
-    setRowParams(row);
-    setOpen(true);
+    dispatch(selectCellValue(row));
+    dispatch(toggleModel(true));
   };
 
   const columns: GridColDef[] = [
@@ -92,7 +90,7 @@ const DashBoard: React.FC = () => {
   ];
 
   let isAdmin = false;
-  if (userData?.role === "admin") {
+  if (userData?.role === role.admin) {
     isAdmin = true;
   }
 
@@ -114,7 +112,7 @@ const DashBoard: React.FC = () => {
   return (
     <>
       <Logout />
-      {rows.length === 0 ? (
+      {rows.ticketData.length === 0 ? (
         <Box sx={{ textAlign: "center", marginTop: 2 }}>
           <Typography variant="h1">No tickets Logged</Typography>
         </Box>
@@ -130,7 +128,7 @@ const DashBoard: React.FC = () => {
             onRowClick={(e) => {
               navigate(`/ticket/${e.row.ticket_id}`);
             }}
-            rows={rows}
+            rows={rows.ticketData}
             columns={filteredColumns}
             getRowId={getRowId}
             initialState={{
@@ -144,14 +142,14 @@ const DashBoard: React.FC = () => {
           />
 
           <DialogBox
-            rowParams={rowParams}
-            open={open}
+            rowParams={rows.cellValue}
+            open={rows.modelOpen}
             handleCloseDialog={() => {
-              setOpen(false);
+              dispatch(toggleModel(false));
             }}
             handleCloseButtonClick={(row: Ticket) => {
-              const status = row.status === "Open" ? "closed" : "Closed";
-              setOpen(false);
+              const status = row.status === "Open" ? "Closed" : "Closed";
+              dispatch(toggleModel(false));
               dispatch(changeStatus(row));
               console.log("TicketData", row);
               console.log("Status:", status);

@@ -6,16 +6,12 @@ import { Paper, Typography } from "@mui/material";
 import Logout from "../Components/Logout";
 
 const TicketDetail = () => {
-  const selector = useSelector((state: RootState) => state.ticketReducer);
+  const ticketDetail = useSelector((state: RootState) => state.ticketReducer);
   let { id } = useParams();
-  // console.log(id);
 
-  const ticketDetail = selector.map((item) => item);
-
-  const specificTicketDetail = ticketDetail.find(
+  const specificTicketDetail = ticketDetail.ticketData.find(
     (ticket) => ticket.ticket_id === id,
   );
-  // console.log(specificTicketDetail);
 
   return (
     <>

@@ -38,13 +38,10 @@ const LoginPage: React.FC = () => {
         isUserFound = true;
         navigate("/dashboard");
         dispatch(loginUser(user));
-        // console.log("Login successful!", user);
       }
     });
 
     if (!isUserFound) {
-      // console.log("error");
-
       dispatch(
         setAlert({
           content: "Invalid username or password",
